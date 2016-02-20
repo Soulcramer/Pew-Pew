@@ -5,22 +5,29 @@ import android.graphics.Canvas;
 
 
 public class Player extends GameObject {
-    private Bitmap spritesheet;
+    /*private Bitmap spritesheet;
     private int score;
-    private double dya;
-    private boolean up;
+    private int direction;
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
+    private boolean isMoving;*/
+    public Bitmap bitmap;
+    public int x;
+    public int y;
+    public boolean touched;
 
-    public Player(Bitmap res, int w, int h, int numFrames) {
+    public Player(Bitmap res, int x, int y) {
 
-        x = 100;
+        /*x = 100;
         y = GamePanel.HEIGHT / 2;
-        //dy = 0;
         score = 0;
         height = h;
         width = w;
+        dx = 0;
+        dy = 0;
+        //l'attribut direction est un entier compris entre 0 et 7 où 0 est le SUD et  7 le SUD-EST.
+        direction = 0;
 
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
@@ -30,60 +37,59 @@ public class Player extends GameObject {
         }
 
         animation.setFrames(image);
-        animation.setDelay(10);
-        startTime = System.nanoTime();
+        animation.setDelay(70);
+        startTime = System.nanoTime();*/
+        this.x = x;
+        this.y = y;
+        this.bitmap = res;
 
     }
 
-    public void setUp(boolean b) {
-        up = b;
-    }
 
     public void update() {
-        /*long elapsed = (System.nanoTime()-startTime)/1000000;
-        if(elapsed>100)
-        {
+        /*long startTime;
+        long timeMillis;
+        long waitTime;
+        long totalTime = 0;
+        int frameCount = 0;
+        long targetTime = 1000 / 30;
+        startTime = System.nanoTime();
+        long elapsed = (System.nanoTime() - startTime) / 1000000;
+        if (elapsed > 100) {
             score++;
             startTime = System.nanoTime();
-        }*/
+        }
         animation.update();
 
-       /* if(up){
-            dy = (int)(dya-=1.1);
+        if (isMoving) {
+            if (false) {
 
+            }
+           // dy = (int) (dya -= 1.1);
+
+        } else {
+           // dy = (int) (dya += 1.1);
         }
-        else{
-            dy = (int)(dya+=1.1);
-        }
 
-        if(dy>14)dy = 14;
-        if(dy<-14)dy = -14;
-
-        y += dy*2;
+        dx = 0;
         dy = 0;*/
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(animation.getImage(), x, y, null);
+        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
     }
 
-    public int getScore() {
-        return score;
+    public void handleActionDown(int eventX, int eventY) {
+        if (eventX >= (x - bitmap.getWidth() / 2) && (eventX <= (x + bitmap.getWidth() / 2))) {
+            if (eventY >= (y - bitmap.getHeight() / 2) && (y <= (y + bitmap.getHeight() / 2))) {
+                // droid touched
+                this.touched = true;
+            } else {
+                this.touched = false;
+            }
+        } else {
+            this.touched = false;
+        }
     }
 
-    public boolean getPlaying() {
-        return playing;
-    }
-
-    public void setPlaying(boolean b) {
-        playing = b;
-    }
-
-    public void resetDYA() {
-        dya = 0;
-    }
-
-    public void resetScore() {
-        score = 0;
-    }
 }

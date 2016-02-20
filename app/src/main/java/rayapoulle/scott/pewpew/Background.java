@@ -15,7 +15,6 @@ public class Background {
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(image, x, y, null);
-        System.out.println(image.getWidth() + " ," + image.getHeight());
     }
 
     public int getWidth() {
