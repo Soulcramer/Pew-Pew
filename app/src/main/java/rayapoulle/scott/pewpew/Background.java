@@ -14,7 +14,12 @@ public class Background {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(image, x, y, null);
+        try {
+            canvas.drawBitmap(image, x, y, null);
+        } catch (Exception e) {
+
+        }
+
     }
 
     public int getWidth() {

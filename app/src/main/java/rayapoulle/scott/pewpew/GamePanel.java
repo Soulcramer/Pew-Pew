@@ -18,6 +18,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int HEIGHT = 480;
     public static final int MOVESPEED = -5;
     private static final String TAG = GamePanel.class.getSimpleName();
+    public boolean noDraw = false;
     private MainThread thread;
     private Background bg;
     private Player player;
@@ -39,7 +40,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         player2 = new PlayerAnimated(
                 BitmapFactory.decodeResource(getResources(), R.drawable.blanchinator)
                 , 200, 200    // initial position
-                , 32, 32    // width and height of sprite
                 , 10, 6);    // FPS and number of frames in the animation
 
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.snow));
@@ -63,6 +63,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         // tell the thread to shut down and wait for it to finish
         // this is a clean shutdown
         boolean retry = true;
+        noDraw = true;
         while (retry) {
             try {
                 thread.join();
@@ -84,27 +85,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
             // delegating event handling to the droid
-            player.handleActionDown((int) event.getX(), (int) event.getY());
-            // check if in the lower part of the screen we exit
-            if (event.getY() > getHeight() - 50) {
-                thread.setRunning(false);
-                ((Activity) getContext()).finish();
-            } else {
-                Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
-            }
-            // the gestures
-            if (player.touched) {
-                // the droid was picked up and is being dragged
-                player.setX((int) event.getX());
-                player.setY((int) event.getY());
-            }
+            //player2.handleActionDown((int) event.getX(), (int) event.getY());
+            float diffX = event.getX() - player2.x;
+            float diffY = event.getY() - player2.y;
+            float length = (float) Math.sqrt(diffX * diffX + diffY * diffY);
+            float normalizedX = diffX / length;
+            float normalizedY = diffY / length;
+            float deltaX = normalizedX * 10;
+            float deltaY = normalizedY * 10;
+            player2.speed.xDirection = deltaX;
+            player2.speed.yDirection = deltaY;
+
+
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
             // touch was released
-            if (player.touched) {
-                player.touched = false;
+            player2.speed.xDirection = 0;
+            player2.speed.yDirection = 0;
+            if (player2.moving) {
+                player2.moving = false;
             }
         }
         return true;
@@ -112,21 +113,47 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+        /*// check collision with right wall if heading right
+        if (player2.speed.getxDirection() == Speed.DIRECTION_RIGHT
+                && player2.x + player2.bitmap.getWidth() / 2 >= getWidth()) {
+            player2.speed.toggleXDirection();
+        }
+        // check collision with left wall if heading left
+        if (player2.speed.getxDirection() == Speed.DIRECTION_LEFT
+                && player2.x - player2.bitmap.getWidth() / 2 <= 0) {
+            player2.speed.toggleXDirection();
+        }
+        // check collision with bottom wall if heading down
+        if (player2.speed.getyDirection() == Speed.DIRECTION_DOWN
+                && player2.x + player2.bitmap.getHeight() / 2 >= getHeight()) {
+            player2.speed.toggleYDirection();
+        }
+        // check collision with top wall if heading up
+        if (player2.speed.getyDirection() == Speed.DIRECTION_UP
+                && player2.x - player2.bitmap.getHeight() / 2 <= 0) {
+            player2.speed.toggleYDirection();
+        }*/
+        // Update the lone droid
         player2.update(System.currentTimeMillis());
     }
 
     @Override
     public void draw(Canvas canvas) {
         //canvas.scale(getWidth() / (WIDTH * 1.f),getHeight() / (HEIGHT * 1.f));
-        super.draw(canvas);
-        bg.draw(canvas);
-        displayFps(avgFps);
-        player2.draw(canvas);
+        //super.draw(canvas);
+        if (!noDraw) {
+            super.draw(canvas);
+            bg.draw(canvas);
+            displayFps(avgFps);
+            player2.draw(canvas);
+        }
+
+
     }
 
     private void displayFps(String fps) {
         if (fps != null) {
-            Log.d(TAG, fps);
+            //Log.d(TAG, fps);
         }
     }
 

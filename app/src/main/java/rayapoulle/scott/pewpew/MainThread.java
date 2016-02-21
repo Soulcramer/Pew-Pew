@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 
 public class MainThread extends Thread {
     // desired fps
-    private final static int MAX_FPS = 50;
+    private final static int MAX_FPS = 60;
     // maximum number of frames to be skipped
     private final static int MAX_FRAME_SKIPS = 5;
     // the frame period
@@ -146,7 +146,7 @@ public class MainThread extends Thread {
                         framesSkipped++;
                     }
                     if (framesSkipped > 0) {
-                        Log.d(TAG, "Skipped:" + framesSkipped);
+                        //Log.d(TAG, "Skipped:" + framesSkipped);
                     }
                     // for statistics
                     framesSkippedPerStatCycle += framesSkipped;
@@ -165,7 +165,7 @@ public class MainThread extends Thread {
             // update game state
             // render state to the screen
         }
-        Log.d(TAG, "Game loop executed " + tickCount + " times");
+        //Log.d(TAG, "Game loop executed " + tickCount + " times");
 
 
     }
