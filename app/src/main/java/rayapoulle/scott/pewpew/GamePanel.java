@@ -27,6 +27,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private float scaleFactorY = getHeight() / (HEIGHT * 1.f);
     // the fps to be displayed
     private String avgFps;
+
     public GamePanel(Context context) {
         super(context);
 
@@ -86,8 +87,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-            // delegating event handling to the droid
-            //player2.handleActionDown((int) event.getX(), (int) event.getY());
             float diffX = event.getX() - player2.x;
             float diffY = event.getY() - player2.y;
             float length = (float) Math.sqrt(diffX * diffX + diffY * diffY);
@@ -97,6 +96,35 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             float deltaY = normalizedY * 10;
             player2.speed.xDirection = deltaX;
             player2.speed.yDirection = deltaY;
+            float angle = (float) Math.acos(normalizedX);
+            if (diffY > 0.0f) {
+                angle = (float) Math.toDegrees(angle);
+                if (angle <= 22.5) {
+                    player2.spritedir = 6;
+                } else if (angle > 22.5 && angle <= 67.5) {
+                    player2.spritedir = 7;
+                } else if (angle > 67.5 && angle <= 112.5) {
+                    player2.spritedir = 0;
+                } else if (angle > 112.5 && angle <= 157.5) {
+                    player2.spritedir = 1;
+                } else if (angle > 157.5) {
+                    player2.spritedir = 2;
+                }
+
+            } else {
+                angle = (float) Math.toDegrees(-angle);
+                if (angle >= -22.5) {
+                    player2.spritedir = 6;
+                } else if (angle < -22.5 && angle >= -67.5) {
+                    player2.spritedir = 5;
+                } else if (angle < -67.5 && angle >= -112.5) {
+                    player2.spritedir = 4;
+                } else if (angle < -112.5 && angle >= -157.5) {
+                    player2.spritedir = 3;
+                } else if (angle < -157.5) {
+                    player2.spritedir = 2;
+                }
+            }
 
 
         }
