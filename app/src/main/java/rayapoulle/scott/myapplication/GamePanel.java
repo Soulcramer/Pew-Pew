@@ -45,7 +45,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 , 200, 200    // initial position
                 , 10, 6);    // FPS and number of frames in the animation
         ia = new IA(
-                BitmapFactory.decodeResource(getResources(), R.drawable.blanchinator), BitmapFactory.decodeResource(getResources(), R.drawable.bullet)
+                BitmapFactory.decodeResource(getResources(), R.drawable.ia), BitmapFactory.decodeResource(getResources(), R.drawable.bullet)
                 , 400, 400    // initial position
                 , 10, 6);    // FPS and number of frames in the animation
 
@@ -104,38 +104,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             float deltaY = normalizedY * 10;
             player.speed.xDirection = deltaX;
             player.speed.yDirection = deltaY;
-            player.speed.angle = (float) Math.acos(normalizedX);
-
-            if (diffY > 0.0f) {
-                player.speed.angle = (float) Math.toDegrees(player.speed.angle);
-                float angle = player.speed.angle;
-                if (angle <= 22.5) {
-                    player.spritedir = 6;
-                } else if (angle > 22.5 && angle <= 67.5) {
-                    player.spritedir = 7;
-                } else if (angle > 67.5 && angle <= 112.5) {
-                    player.spritedir = 0;
-                } else if (angle > 112.5 && angle <= 157.5) {
-                    player.spritedir = 1;
-                } else if (angle > 157.5) {
-                    player.spritedir = 2;
-                }
-
-            } else {
-                player.speed.angle = (float) Math.toDegrees(-player.speed.angle);
-                float angle = player.speed.angle;
-                if (angle >= -22.5) {
-                    player.spritedir = 6;
-                } else if (angle < -22.5 && angle >= -67.5) {
-                    player.spritedir = 5;
-                } else if (angle < -67.5 && angle >= -112.5) {
-                    player.spritedir = 4;
-                } else if (angle < -112.5 && angle >= -157.5) {
-                    player.spritedir = 3;
-                } else if (angle < -157.5) {
-                    player.spritedir = 2;
-                }
-            }
 
 
         }
@@ -239,7 +207,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
         ball.update(System.currentTimeMillis());
 
-        Log.d(TAG, "update: " + ia.speed.angle);
+        //Log.d(TAG, "update: " + ia.speed.angle);
         ia.update(System.currentTimeMillis());
 
 
@@ -274,7 +242,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private void displayFps(String fps) {
         if (fps != null) {
-            Log.d(TAG, fps);
+            //Log.d(TAG, fps);
         }
     }
 

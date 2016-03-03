@@ -19,6 +19,34 @@ public class IA extends Player {
 
 
     public void update(long gameTime) {
+
+        // This block make the ia change his direction sprite by depending his angle
+        if ( (angle = -Math.toDegrees(Math.atan2(this.speed.xDirection, this.speed.yDirection))) > 0){
+            if (angle <= 22.5) {
+                spritedir = 0;
+            } else if (angle > 22.5 && angle <= 67.5) {
+                spritedir = 1;
+            } else if (angle > 67.5 && angle <= 112.5) {
+                spritedir = 2;
+            } else if (angle > 112.5 && angle <= 157.5) {
+                spritedir = 3;
+            } else if (angle > 157.5) {
+                spritedir = 4;
+            }
+        }else{
+            if (angle >= -22.5) {
+                spritedir = 0;
+            } else if (angle < -22.5 && angle >= -67.5) {
+                spritedir = 7;
+            } else if (angle < -67.5 && angle >= -112.5) {
+                spritedir = 6;
+            } else if (angle < -112.5 && angle >= -157.5) {
+                spritedir = 5;
+            } else if (angle < -157.5) {
+                spritedir = 4;
+            }
+        }
+
         if (gameTime > frameTicker + framePeriod) {
             frameTicker = gameTime;
             // increment the frame
@@ -29,8 +57,8 @@ public class IA extends Player {
 
 
         }
-        if (gameTime > fireTicker + (1000/5) && speed.xDirection != Speed.DIRECTION_NOX && speed.yDirection != Speed.DIRECTION_NOY){
-            bullets.add(new Bullet(bulletBitmap, x+(spriteWidth/2), y+(spriteHeight/2), speed.xDirection, speed.yDirection, speed.angle));
+        if (gameTime > fireTicker + (1000 / 5) && speed.xDirection != Speed.DIRECTION_NOX && speed.yDirection != Speed.DIRECTION_NOY) {
+            bullets.add(new Bullet(bulletBitmap, x + (spriteWidth / 2), y + (spriteHeight / 2), speed.xDirection, speed.yDirection));
             fireTicker = gameTime;
         }
         // define the rectangle to cut out sprite
